@@ -35,6 +35,10 @@ const authRoute = require("./Routes/AuthRoutes.js");
 const recipeRoute = require("./Routes/RecipesRoutes.js");
 const cuisineRoute = require("./Routes/CuisinesRoutes.js");
 
+app.get("/", (req, res) => {
+  res.send("<h1>welcome</h1>");
+});
+
 app.use("/api/user/", authRoute);
 app.use("/api/recipe/", recipeRoute);
 app.use("/api/cuisine/", cuisineRoute);
