@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 3001;
 const MONGO_URL = process.env.MONGO_URL;
 
 // Import Routes
-const authRoute = require("./Routes/AuthRoutes");
+const authRoute = require("./Routes/AuthRoutes.js");
 const recipeRoute = require("./Routes/RecipesRoutes.js");
 const cuisineRoute = require("./Routes/CuisinesRoutes.js");
 
