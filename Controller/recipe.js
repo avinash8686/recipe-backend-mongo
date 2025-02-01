@@ -1,4 +1,4 @@
-const User = require("../Model/User");
+const User = require("../model/User");
 const Recipes = require("../model/Recipe");
 const Cuisines = require("../model/Cuisine");
 const mongoose = require("mongoose");
@@ -8,7 +8,6 @@ const Likes = require("../model/Likes");
 // CREATE: Create a recipe
 const createARecipePost = async (req, res) => {
   try {
-    console.log("creatin recipe....", req.body, req.user);
     const { title, description, cuisine } = req.body;
     const newRecipe = Recipes.create({
       title: title,

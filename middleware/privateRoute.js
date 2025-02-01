@@ -2,8 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 
-module.exports = function (req, res, next) {
-  console.log("req headers", req.headers["auth-token"]);
+module.exports = async function (req, res, next) {
   const token = req.header("auth-token");
 
   if (!token) {
@@ -11,7 +10,9 @@ module.exports = function (req, res, next) {
   }
 
   try {
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    const tokenSecret =
+      (await getParameter("TOKEN_SECRET")) || process.env.TOKEN_SECRET;
+    const verified = jwt.verify(token, tokenSecret);
     req.user = verified;
     next();
   } catch (error) {
@@ -20,10 +21,9 @@ module.exports = function (req, res, next) {
       if (!refreshToken) return res.status(401).send("Access Denied");
 
       try {
-        const decoded = jwt.verify(
-          refreshToken,
-          process.env.REFRESH_TOKEN_SECRET
-        );
+        const refreshTokenSecret =
+          (await getParameter("TOKEN_SECRET")) || process.env.TOKEN_SECRET;
+        const decoded = jwt.verify(refreshToken, refreshTokenSecret);
 
         const newAccessToken = generateAccessToken(decoded._id);
         res.setHeader("auth-token", newAccessToken);
@@ -39,8 +39,10 @@ module.exports = function (req, res, next) {
 };
 
 // Helper Fn to generate an access token
-function generateAccessToken(userId) {
-  return jwt.sign({ _id: userId }, process.env.TOKEN_SECRET, {
+async function generateAccessToken(userId) {
+  const tokenSecret =
+    (await getParameter("TOKEN_SECRET")) || process.env.TOKEN_SECRET;
+  return jwt.sign({ _id: userId }, tokenSecret, {
     expiresIn: "50m",
   });
 }

@@ -2,7 +2,7 @@ const {
   registerValidation,
   loginValidation,
 } = require("../validation/User/validation");
-const User = require("../Model/User");
+const User = require("../model/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -10,12 +10,15 @@ const Cuisines = require("../model/Cuisine");
 const Likes = require("../model/Likes");
 const Recipes = require("../model/Recipe");
 var _ = require("underscore");
+const { getParameter } = require("../Config/aws-creds");
 
 dotenv.config();
 
 //function to generate access token
-function generateAccessToken(userId) {
-  return jwt.sign({ _id: userId }, process.env.TOKEN_SECRET);
+async function generateAccessToken(userId) {
+  const tokenSecret =
+    (await getParameter("TOKEN_SECRET")) || process.env.TOKEN_SECRET;
+  return jwt.sign({ _id: userId }, tokenSecret);
 }
 
 const register = async (req, res) => {
@@ -91,7 +94,9 @@ const refreshToken = async (req, res) => {
 
   // Check if the refresh token is valid
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const refreshTokenSecret =
+      (await getParameter("TOKEN_SECRET")) || process.env.TOKEN_SECRET;
+    const decoded = jwt.verify(refreshToken, refreshTokenSecret);
 
     // Create and assign a new access token
     const accessToken = generateAccessToken(decoded._id);
@@ -103,8 +108,11 @@ const refreshToken = async (req, res) => {
 };
 
 // Helper function to generate a refresh token
-function generateRefreshToken(userId) {
-  return jwt.sign({ _id: userId }, process.env.REFRESH_TOKEN_SECRET);
+async function generateRefreshToken(userId) {
+  const refreshTokenSecret =
+    (await getParameter("REFRESH_TOKEN_SECRET")) ||
+    process.env.REFRESH_TOKEN_SECRET;
+  return jwt.sign({ _id: userId }, refreshTokenSecret);
 }
 
 // CREATE: Create a recipe

@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-ssm": "^3.738.0",
+    "@aws-sdk/credential-providers": "^3.738.0",
     "@netlify/functions": "^2.8.2",
+    "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
