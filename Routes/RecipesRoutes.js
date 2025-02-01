@@ -16,7 +16,7 @@ const {
 // Admin
 router.post("/", verify, createARecipePost);
 
-router.get("/search", verify, getAllRecipesBySearch);
+router.get("/search", getAllRecipesBySearch);
 
 router.get("/", verify, getAllRecipes);
 
