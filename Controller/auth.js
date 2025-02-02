@@ -22,9 +22,9 @@ async function generateAccessToken(userId) {
 }
 
 const register = async (req, res) => {
-  const { name, email, password, isAdmin } = req.body.data;
+  const { name, email, password, isAdmin } = req.body;
 
-  const { error } = registerValidation(req.body.data);
+  const { error } = registerValidation(req.body);
   if (error) {
     return res.status(400).send({ msg: "Validation failed!!!" });
   }
@@ -57,9 +57,9 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body.data;
+    const { email, password } = req.body;
     // Validate the data
-    const { error } = loginValidation(req.body.data);
+    const { error } = loginValidation(req.body);
     if (error) {
       return res.status(400).send({ msg: "Validation failed!!!", error });
     }
@@ -75,8 +75,8 @@ const login = async (req, res) => {
     }
 
     // Create & assign an access token
-    const accessToken = generateAccessToken(user._id);
-    const refreshToken = generateRefreshToken(user._id);
+    const accessToken = await generateAccessToken(user._id);
+    const refreshToken = await generateRefreshToken(user._id);
 
     res.json({
       user: user,

@@ -1,6 +1,7 @@
 // verify - Middleware for JWT authentication
 
 const jwt = require("jsonwebtoken");
+const { getParameter } = require("../Config/aws-creds");
 
 module.exports = async function (req, res, next) {
   const token = req.header("auth-token");

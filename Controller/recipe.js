@@ -13,7 +13,7 @@ const createARecipePost = async (req, res) => {
       title: title,
       description: description,
       user: req.user._id,
-      cuisine: cuisine,
+      cuisineId: cuisine,
     });
     if (!newRecipe)
       throw Error("Something went wrong while creating the recipe");
@@ -163,7 +163,7 @@ const deleteARecipePost = async (req, res) => {
   try {
     const recipe = await Recipes.findById(req.params.id);
     if (!recipe) throw Error("Something went wrong while deleting the post");
-    const deletedRecipe = await Recipe.findByIdAndDelete(req.params.id);
+    const deletedRecipe = await Recipes.findByIdAndDelete(req.params.id);
     res.status(200).json({ success: true });
   } catch (error) {
     res.status(400).json({ message: err });
